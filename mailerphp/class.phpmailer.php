@@ -1,259 +1,37 @@
 <?php
-/**
- * PHPMailer - PHP email creation and transport class.
- * PHP Version 5
- * @package PHPMailer
- * @link https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author Brent R. Matzelle (original founder)
- * @copyright 2012 - 2014 Marcus Bointon
- * @copyright 2010 - 2012 Jim Jagielski
- * @copyright 2004 - 2009 Andy Prevost
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- * @note This program is distributed in the hope that it will be useful - WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.
- */
 
-/**
- * PHPMailer - PHP email creation and transport class.
- * @package PHPMailer
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author Brent R. Matzelle (original founder)
- */
 class PHPMailer
 {
-    /**
-     * The PHPMailer Version number.
-     * @var string
-     */
     public $Version = '5.2.16';
-
-    /**
-     * Email priority.
-     * Options: null (default), 1 = High, 3 = Normal, 5 = low.
-     * When null, the header is not set at all.
-     * @var integer
-     */
     public $Priority = null;
-
-    /**
-     * The character set of the message.
-     * @var string
-     */
     public $CharSet = 'iso-8859-1';
-
-    /**
-     * The MIME Content-type of the message.
-     * @var string
-     */
     public $ContentType = 'text/plain';
-
-    /**
-     * The message encoding.
-     * Options: "8bit", "7bit", "binary", "base64", and "quoted-printable".
-     * @var string
-     */
     public $Encoding = '8bit';
-
-    /**
-     * Holds the most recent mailer error message.
-     * @var string
-     */
     public $ErrorInfo = '';
-
-    /**
-     * The From email address for the message.
-     * @var string
-     */
     public $From = 'root@localhost';
-
-    /**
-     * The From name of the message.
-     * @var string
-     */
     public $FromName = 'Root User';
-
-    /**
-     * The Sender email (Return-Path) of the message.
-     * If not empty, will be sent via -f to sendmail or as 'MAIL FROM' in smtp mode.
-     * @var string
-     */
     public $Sender = '';
-
-    /**
-     * The Return-Path of the message.
-     * If empty, it will be set to either From or Sender.
-     * @var string
-     * @deprecated Email senders should never set a return-path header;
-     * it's the receiver's job (RFC5321 section 4.4), so this no longer does anything.
-     * @link https://tools.ietf.org/html/rfc5321#section-4.4 RFC5321 reference
-     */
     public $ReturnPath = '';
-
-    /**
-     * The Subject of the message.
-     * @var string
-     */
     public $Subject = '';
-
-    /**
-     * An HTML or plain text message body.
-     * If HTML then call isHTML(true).
-     * @var string
-     */
     public $Body = '';
-
-    /**
-     * The plain-text message body.
-     * This body can be read by mail clients that do not have HTML email
-     * capability such as mutt & Eudora.
-     * Clients that can read HTML will view the normal Body.
-     * @var string
-     */
     public $AltBody = '';
-
-    /**
-     * An iCal message part body.
-     * Only supported in simple alt or alt_inline message types
-     * To generate iCal events, use the bundled extras/EasyPeasyICS.php class or iCalcreator
-     * @link http://sprain.ch/blog/downloads/php-class-easypeasyics-create-ical-files-with-php/
-     * @link http://kigkonsult.se/iCalcreator/
-     * @var string
-     */
     public $Ical = '';
-
-    /**
-     * The complete compiled MIME message body.
-     * @access protected
-     * @var string
-     */
     protected $MIMEBody = '';
-
-    /**
-     * The complete compiled MIME message headers.
-     * @var string
-     * @access protected
-     */
     protected $MIMEHeader = '';
-
-    /**
-     * Extra headers that createHeader() doesn't fold in.
-     * @var string
-     * @access protected
-     */
     protected $mailHeader = '';
-
-    /**
-     * Word-wrap the message body to this number of chars.
-     * Set to 0 to not wrap. A useful value here is 78, for RFC2822 section 2.1.1 compliance.
-     * @var integer
-     */
     public $WordWrap = 0;
-
-    /**
-     * Which method to use to send mail.
-     * Options: "mail", "sendmail", or "smtp".
-     * @var string
-     */
     public $Mailer = 'mail';
-
-    /**
-     * The path to the sendmail program.
-     * @var string
-     */
     public $Sendmail = '/usr/sbin/sendmail';
-
-    /**
-     * Whether mail() uses a fully sendmail-compatible MTA.
-     * One which supports sendmail's "-oi -f" options.
-     * @var boolean
-     */
     public $UseSendmailOptions = true;
-
-    /**
-     * Path to PHPMailer plugins.
-     * Useful if the SMTP class is not in the PHP include path.
-     * @var string
-     * @deprecated Should not be needed now there is an autoloader.
-     */
     public $PluginDir = '';
-
-    /**
-     * The email address that a reading confirmation should be sent to, also known as read receipt.
-     * @var string
-     */
     public $ConfirmReadingTo = '';
-
-    /**
-     * The hostname to use in the Message-ID header and as default HELO string.
-     * If empty, PHPMailer attempts to find one with, in order,
-     * $_SERVER['SERVER_NAME'], gethostname(), php_uname('n'), or the value
-     * 'localhost.localdomain'.
-     * @var string
-     */
     public $Hostname = '';
-
-    /**
-     * An ID to be used in the Message-ID header.
-     * If empty, a unique id will be generated.
-     * @var string
-     */
     public $MessageID = '';
-
-    /**
-     * The message Date to be used in the Date header.
-     * If empty, the current date will be added.
-     * @var string
-     */
     public $MessageDate = '';
-
-    /**
-     * SMTP hosts.
-     * Either a single hostname or multiple semicolon-delimited hostnames.
-     * You can also specify a different port
-     * for each host by using this format: [hostname:port]
-     * (e.g. "smtp1.example.com:25;smtp2.example.com").
-     * You can also specify encryption type, for example:
-     * (e.g. "tls://smtp1.example.com:587;ssl://smtp2.example.com:465").
-     * Hosts will be tried in order.
-     * @var string
-     */
     public $Host = 'localhost';
-
-    /**
-     * The default SMTP server port.
-     * @var integer
-     * @TODO Why is this needed when the SMTP class takes care of it?
-     */
     public $Port = 25;
-
-    /**
-     * The SMTP HELO of the message.
-     * Default is $Hostname. If $Hostname is empty, PHPMailer attempts to find
-     * one with the same method described above for $Hostname.
-     * @var string
-     * @see PHPMailer::$Hostname
-     */
     public $Helo = '';
-
-    /**
-     * What kind of encryption to use on the SMTP connection.
-     * Options: '', 'ssl' or 'tls'
-     * @var string
-     */
     public $SMTPSecure = '';
-
-    /**
-     * Whether to enable TLS encryption automatically if a server supports it,
-     * even if `SMTPSecure` is not set to 'tls'.
-     * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
-     * @var boolean
-     */
     public $SMTPAutoTLS = true;
 
     /**
@@ -310,43 +88,8 @@ class PHPMailer
      * @var integer
      */
     public $Timeout = 300;
-
-    /**
-     * SMTP class debug output mode.
-     * Debug output level.
-     * Options:
-     * * `0` No output
-     * * `1` Commands
-     * * `2` Data and commands
-     * * `3` As 2 plus connection status
-     * * `4` Low-level data output
-     * @var integer
-     * @see SMTP::$do_debug
-     */
     public $SMTPDebug = 0;
-
-    /**
-     * How to handle debug output.
-     * Options:
-     * * `echo` Output plain-text as-is, appropriate for CLI
-     * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
-     * * `error_log` Output to error log as configured in php.ini
-     *
-     * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
-     * <code>
-     * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
-     * </code>
-     * @var string|callable
-     * @see SMTP::$Debugoutput
-     */
     public $Debugoutput = 'echo';
-
-    /**
-     * Whether to keep SMTP connection open after each message.
-     * If this is set to true then to close the connection
-     * requires an explicit call to smtpClose().
-     * @var boolean
-     */
     public $SMTPKeepAlive = false;
 
     /**
@@ -419,25 +162,6 @@ class PHPMailer
      * @var string
      */
     public $DKIM_private = '';
-
-    /**
-     * Callback Action function name.
-     *
-     * The function that handles the result of the send email action.
-     * It is called out by send() for each email sent.
-     *
-     * Value can be any php callable: http://www.php.net/is_callable
-     *
-     * Parameters:
-     *   boolean $result        result of the send action
-     *   string  $to            email address of the recipient
-     *   string  $cc            cc email addresses
-     *   string  $bcc           bcc email addresses
-     *   string  $subject       the subject
-     *   string  $body          the email body
-     *   string  $from          email address of sender
-     * @var string
-     */
     public $action_function = '';
 
     /**
@@ -843,19 +567,6 @@ class PHPMailer
     {
         return $this->addOrEnqueueAnAddress('Reply-To', $address, $name);
     }
-
-    /**
-     * Add an address to one of the recipient arrays or to the ReplyTo array. Because PHPMailer
-     * can't validate addresses with an IDN without knowing the PHPMailer::$CharSet (that can still
-     * be modified after calling this function), addition of such addresses is delayed until send().
-     * Addresses that have been added already return false, but do not throw exceptions.
-     * @param string $kind One of 'to', 'cc', 'bcc', or 'ReplyTo'
-     * @param string $address The email address to send, resp. to reply to
-     * @param string $name
-     * @throws phpmailerException
-     * @return boolean true on success, false if address already used or invalid in some way
-     * @access protected
-     */
     protected function addOrEnqueueAnAddress($kind, $address, $name)
     {
         $address = trim($address);
@@ -1156,18 +867,6 @@ class PHPMailer
         // @TODO: Write our own "idn_to_ascii" function for PHP <= 5.2.
         return function_exists('idn_to_ascii') and function_exists('mb_convert_encoding');
     }
-
-    /**
-     * Converts IDN in given email address to its ASCII form, also known as punycode, if possible.
-     * Important: Address must be passed in same encoding as currently set in PHPMailer::$CharSet.
-     * This function silently returns unmodified address if:
-     * - No conversion is necessary (i.e. domain name is not an IDN, or is already in ASCII form)
-     * - Conversion to punycode is impossible (e.g. required PHP functions are not available)
-     *   or fails for any reason (e.g. domain has characters not allowed in an IDN)
-     * @see PHPMailer::$CharSet
-     * @param string $address The email address to convert
-     * @return string The encoded address in ASCII form
-     */
     public function punyencodeAddress($address)
     {
         // Verify we have required functions, CharSet, and at-sign.
@@ -1681,6 +1380,15 @@ class PHPMailer
      */
     public function setLanguage($langcode = 'en', $lang_path = '')
     {
+        // Backwards compatibility for renamed language codes
+        $renamed_langcodes = array(
+            'dk' => 'da',
+        );
+
+        if (isset($renamed_langcodes[$langcode])) {
+            $langcode = $renamed_langcodes[$langcode];
+        }
+
         // Define full set of translatable strings in English
         $PHPMAILER_LANG = array(
             'authenticate' => 'SMTP Error: Could not authenticate.',
@@ -1706,6 +1414,10 @@ class PHPMailer
         if (empty($lang_path)) {
             // Calculate an absolute path so it can work if CWD is not here
             $lang_path = dirname(__FILE__). DIRECTORY_SEPARATOR . 'language'. DIRECTORY_SEPARATOR;
+        }
+        //Validate $langcode
+        if (!preg_match('/^[a-z]{2}(?:_[a-zA-Z]{2})?$/', $langcode)) {
+            $langcode = 'en';
         }
         $foundlang = true;
         $lang_file = $lang_path . 'phpmailer.lang-' . $langcode . '.php';
@@ -2736,12 +2448,6 @@ class PHPMailer
         return $encoded;
     }
 
-    /**
-     * Check if a string contains multi-byte characters.
-     * @access public
-     * @param string $str multi-byte text to wrap encode
-     * @return boolean
-     */
     public function hasMultiBytes($str)
     {
         if (function_exists('mb_strlen')) {
@@ -2751,26 +2457,12 @@ class PHPMailer
         }
     }
 
-    /**
-     * Does a string contain any 8-bit chars (in any charset)?
-     * @param string $text
-     * @return boolean
-     */
+
     public function has8bitChars($text)
     {
         return (boolean)preg_match('/[\x80-\xFF]/', $text);
     }
 
-    /**
-     * Encode and wrap long multibyte strings for mail headers
-     * without breaking lines within a character.
-     * Adapted from a function by paravoid
-     * @link http://www.php.net/manual/en/function.mb-encode-mimeheader.php#60283
-     * @access public
-     * @param string $str multi-byte text to wrap encode
-     * @param string $linebreak string to use as linefeed/end-of-line
-     * @return string
-     */
     public function base64EncodeWrapMB($str, $linebreak = null)
     {
         $start = '=?' . $this->CharSet . '?B?';
@@ -3675,7 +3367,7 @@ class PHPMailer
      * @access public
      * @param string $signHeader
      * @throws phpmailerException
-     * @return string
+     * @return string The DKIM signature value
      */
     public function DKIM_Sign($signHeader)
     {
@@ -3686,14 +3378,32 @@ class PHPMailer
             return '';
         }
         $privKeyStr = file_get_contents($this->DKIM_private);
-        if ($this->DKIM_passphrase != '') {
+        if ('' != $this->DKIM_passphrase) {
             $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
         } else {
             $privKey = openssl_pkey_get_private($privKeyStr);
         }
-        if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) { //sha1WithRSAEncryption
-            openssl_pkey_free($privKey);
-            return base64_encode($signature);
+        //Workaround for missing digest algorithms in old PHP & OpenSSL versions
+        //@link http://stackoverflow.com/a/11117338/333340
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0 and
+            in_array('sha256WithRSAEncryption', openssl_get_md_methods(true))) {
+            if (openssl_sign($signHeader, $signature, $privKey, 'sha256WithRSAEncryption')) {
+                openssl_pkey_free($privKey);
+                return base64_encode($signature);
+            }
+        } else {
+            $pinfo = openssl_pkey_get_details($privKey);
+            $hash = hash('sha256', $signHeader);
+            //'Magic' constant for SHA256 from RFC3447
+            //@link https://tools.ietf.org/html/rfc3447#page-43
+            $t = '3031300d060960864801650304020105000420' . $hash;
+            $pslen = $pinfo['bits'] / 8 - (strlen($t) / 2 + 3);
+            $eb = pack('H*', '0001' . str_repeat('FF', $pslen) . '00' . $t);
+
+            if (openssl_private_encrypt($eb, $signature, $privKey, OPENSSL_NO_PADDING)) {
+                openssl_pkey_free($privKey);
+                return base64_encode($signature);
+            }
         }
         openssl_pkey_free($privKey);
         return '';
