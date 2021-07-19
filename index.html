@@ -29,7 +29,7 @@ $("#news__form").submit(function (event) { //Change
 	
 		$.ajax({
 			type: "POST",
-			url: "http://ifoodie.beget.tech/bet/mailerphp/send.php", //Change
+			url: "mailerphp/send.php", //Change
 			data: th.serialize()
 		}).done(function () {
 			$(this).find("input").val("");
