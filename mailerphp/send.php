@@ -10,14 +10,14 @@ $email = $_POST['email'];
 $mail = new PHPMailer;
 $mail->CharSet = 'UTF-8';
 $mail->isSMTP(); 
-$mail->Host = 'smtp.test.com';  
+$mail->Host = 'smtp.mail.ru';
 $mail->SMTPAuth = true;                      
-$mail->Username = 'example@mail.com';
-$mail->Password = 'password';
+$mail->Username = 'azicakcl@mail.ru';
+$mail->Password = '123789123';
 $mail->SMTPSecure = 'ssl';                            
 $mail->Port = 465;
-$mail->setFrom('example@mail.com'); 
-$mail->addAddress('example@mail.com'); 
+$mail->setFrom('azicakcl@mail.ru'); 
+$mail->addAddress('azicakcl@mail.ru'); 
 
 // Прикрепление файлов
   for ($ct = 0; $ct < count($_FILES['userfile']['tmp_name']); $ct++) {
